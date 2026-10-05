@@ -1,0 +1,94 @@
+name: Bug report
+description: Report something that looks wrong, plays wrong, runs badly or crashes.
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. The more precisely you describe it, the faster it can be fixed.
+
+        Please search the existing issues first, and do not report security problems here.
+
+        See the [security policy](https://github.com/cryptosecco/kaze-no-michi/blob/main/SECURITY.md).
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe what you saw. Where in the game were you, and what were you doing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The shortest list of steps that triggers the problem.
+      placeholder: |
+        1. Start a new journey
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      description: The game needs a browser with WebGL2.
+      placeholder: Chrome 140
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: macOS 15, Windows 11, Ubuntu 24.04
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: GPU and hardware
+      description: "The graphics card or chip, and the machine. In Chrome, the page chrome://gpu shows the GPU in use."
+      placeholder: Apple M2, NVIDIA RTX 3060, Intel UHD 620
+    validations:
+      required: true
+
+  - type: dropdown
+    id: quality
+    attributes:
+      label: Quality preset
+      description: "The preset the game ran at: Quality in the pause menu, or ?quality= in the URL. Default: high."
+      options:
+        - low
+        - medium
+        - high
+        - ultra
+      default: 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: Open the developer tools (F12), switch to the Console tab, and paste any errors or warnings here.
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or video
+      description: Drag and drop images or short videos here. They help a lot with visual problems.

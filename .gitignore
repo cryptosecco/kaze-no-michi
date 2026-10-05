@@ -1,0 +1,33 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+.vite/
+.cache/
+
+# Generated captures and reports written by scripts/
+out/
+
+# Environment files and local deployment links
+.env
+.env.*
+!.env.example
+*.local
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local tooling workspaces
+.claude/
+.superpowers/
+.planning/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db

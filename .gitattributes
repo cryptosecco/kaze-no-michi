@@ -1,0 +1,17 @@
+# Text files are normalised to LF in the repository and in the working tree
+* text=auto eol=lf
+
+# Binary files are never converted or diffed as text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.mp4 binary
+*.mov binary
+
+# The lockfile is generated: collapse it in diffs and leave it out of language statistics
+package-lock.json linguist-generated=true -diff
+
+# Documentation is not counted as source code in language statistics
+docs/** linguist-documentation

@@ -1,0 +1,1331 @@
+/* 風の道 — UI. Ink, bone paper, gold leaf and a single vermilion accent. No boxes, no chrome: brush marks,
+   hairlines and generous space. Everything lives inside #ui (pointer-events off unless a screen needs it). */
+
+:root {
+  --kz-ink: #0c0a08;
+  --kz-bone: #f2e9d8;
+  --kz-bone-2: rgba(242, 233, 216, 0.74);
+  --kz-bone-3: rgba(242, 233, 216, 0.46);
+  --kz-gold: #d9b56f;
+  --kz-gold-2: rgba(217, 181, 111, 0.72);
+  --kz-verm: #b83a22;
+  --kz-verm-hi: #d8512f;
+  --kz-f-brush: 'Yuji Boku', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --kz-f-serif: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --kz-f-jp: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --kz-ease: cubic-bezier(0.22, 0.68, 0.18, 1);
+  --kz-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 0 22px rgba(0, 0, 0, 0.32);
+  --kz-shadow-strong: 0 1px 2px rgba(0, 0, 0, 0.6), 0 0 14px rgba(20, 12, 4, 0.55);
+  --kz-gold-pale: #f1d9a6;
+  --kz-shade-mask: radial-gradient(closest-side, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 34%, rgba(0, 0, 0, 0.18) 66%, transparent 100%);
+}
+/* Shade: darkens the rendered frame behind UI text while keeping its hue. backdrop-filter sees the WebGL
+   canvas; a dark overlay would grey the golden sky, and blend modes cannot reach the canvas from inside the
+   fixed #ui layer (it is an isolated group). The radial mask feathers it into nothing. */
+.kz-shade,
+.kz-objective::before,
+.kz-vitals::before,
+.kz-prompt::before,
+.kz-card::before,
+.kz-toast::before {
+  /* warm the darkened sky (sepia) so it reads as dusk, not as a grey cloud */
+  -webkit-backdrop-filter: brightness(0.62) sepia(0.28) saturate(1.2);
+  backdrop-filter: brightness(0.62) sepia(0.28) saturate(1.2);
+  -webkit-mask-image: var(--kz-shade-mask);
+  mask-image: var(--kz-shade-mask);
+}
+
+#ui {
+  font-family: var(--kz-f-serif);
+  color: var(--kz-bone);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  user-select: none;
+}
+
+#ui .kz-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 900ms var(--kz-ease), visibility 0s linear 900ms;
+}
+#ui .kz-layer.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 900ms var(--kz-ease), visibility 0s;
+}
+#ui .kz-layer.instant,
+#ui .kz-layer.instant * {
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+#ui .kz-interactive {
+  pointer-events: auto;
+}
+
+/* ---------------------------------------------------------------- title */
+.kz-title .kz-veil {
+  /* a clean, warm vignette: the landscape behind the logo turns a dark warm amber (not a brown wash), the right half
+     with the sun and the torii stays clear */
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(95% 110% at 4% 46%, rgba(30, 15, 5, 0.66) 0%, rgba(30, 15, 5, 0.5) 28%, rgba(30, 15, 5, 0.2) 52%, rgba(30, 15, 5, 0) 68%),
+    linear-gradient(180deg, rgba(24, 12, 5, 0.22) 0%, rgba(24, 12, 5, 0) 20%, rgba(24, 12, 5, 0) 78%, rgba(24, 12, 5, 0.34) 100%);
+}
+.kz-title .kz-veil::before {
+  /* shallow depth of field behind the logo: the world softens, the calligraphy stays sharp */
+  content: '';
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(5px) brightness(0.92) sepia(0.3) saturate(1.2);
+  backdrop-filter: blur(5px) brightness(0.92) sepia(0.3) saturate(1.2);
+  -webkit-mask-image: radial-gradient(52% 80% at 8% 44%, #000 0%, rgba(0, 0, 0, 0.8) 45%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
+  mask-image: radial-gradient(52% 80% at 8% 44%, #000 0%, rgba(0, 0, 0, 0.8) 45%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
+}
+.kz-title .kz-veil::after {
+  /* sumi wash: paper fibres + uneven ink absorption (a trace: heavier, it muddies the landscape) */
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.03' numOctaves='4' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.04  0 0 0 0 0.03  0 0 0 -1.5 1.05'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-size: 1024px 1024px;
+  -webkit-mask-image: radial-gradient(90% 90% at 10% 58%, #000 20%, transparent 70%);
+  mask-image: radial-gradient(90% 90% at 10% 58%, #000 20%, transparent 70%);
+}
+.kz-title .kz-block {
+  position: absolute;
+  left: clamp(40px, 7.2vw, 150px);
+  top: clamp(90px, 19vh, 240px);
+  width: min(560px, 42vw);
+}
+.kz-logo-wrap {
+  position: relative;
+  display: inline-block;
+}
+/* calligraphy: ink layer (SVG filter) over an independent soft shadow layer */
+.kz-inkwrap {
+  position: relative;
+  display: inline-block;
+  text-shadow: none;
+}
+.kz-inkwrap > .g {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: rgba(6, 5, 3, 0.62);
+  filter: blur(14px);
+  transform: translateY(0.05em);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.kz-inkwrap > .i {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  filter: url(#kz-kanji);
+}
+.kz-logo {
+  font-family: var(--kz-f-brush);
+  font-size: clamp(100px, 10.4vw, 212px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--kz-bone);
+  white-space: nowrap;
+  font-feature-settings: 'palt';
+}
+.kz-logo > .i {
+  filter: url(#kz-logo);
+}
+.kz-logo > .g {
+  color: rgba(6, 5, 3, 0.7);
+  filter: blur(22px);
+}
+.kz-seal {
+  position: absolute;
+  right: -0.08em;
+  bottom: -0.02em;
+  width: clamp(30px, 2.5vw, 46px);
+  height: clamp(30px, 2.5vw, 46px);
+  transform: translate(62%, 28%) rotate(-3deg);
+}
+.kz-seal svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: url(#kz-seal);
+}
+.kz-romaji {
+  margin-top: clamp(14px, 1.6vh, 22px);
+  font-weight: 400;
+  font-size: clamp(14px, 1vw, 18px);
+  letter-spacing: 0.64em;
+  color: rgba(242, 233, 216, 0.86);
+  text-shadow: var(--kz-shadow);
+  padding-left: 0.2em;
+}
+.kz-rule {
+  display: block;
+  margin: clamp(18px, 2.6vh, 30px) 0 0 -6px;
+  color: var(--kz-gold-2);
+  opacity: 0.9;
+}
+.kz-title .kz-menu {
+  margin-top: clamp(36px, 7.2vh, 86px);
+}
+/* the inactive title entries stay readable over the dark field */
+.kz-title .kz-item:not(.on) {
+  color: rgba(242, 233, 216, 0.6);
+}
+.kz-press {
+  position: absolute;
+  left: clamp(40px, 7.2vw, 150px);
+  top: calc(clamp(90px, 19vh, 240px) + clamp(300px, 34vh, 420px));
+  font-size: 19px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--kz-bone-2);
+  text-shadow: var(--kz-shadow);
+  animation: kz-breathe 3.6s ease-in-out infinite;
+}
+.kz-title.menu-open .kz-press {
+  opacity: 0 !important;
+  animation: none;
+  transition: opacity 500ms;
+}
+.kz-title .kz-menu-wrap {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 900ms var(--kz-ease), transform 900ms var(--kz-ease);
+}
+.kz-title.menu-open .kz-menu-wrap {
+  opacity: 1;
+  transform: none;
+}
+.kz-hints {
+  position: absolute;
+  left: clamp(40px, 7.2vw, 150px);
+  bottom: clamp(28px, 5vh, 58px);
+  display: flex;
+  gap: 30px;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  color: var(--kz-bone-3);
+  text-shadow: var(--kz-shadow);
+}
+.kz-hints kbd {
+  font-family: var(--kz-f-serif);
+  font-size: 13px;
+  color: var(--kz-bone-2);
+  margin-right: 9px;
+  letter-spacing: 0.05em;
+}
+@keyframes kz-breathe {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.95; }
+}
+
+/* reveal choreography for the title block */
+.kz-title.show .kz-logo > .i {
+  animation: kz-ink-in 2.4s var(--kz-ease) both;
+}
+.kz-title.show .kz-logo > .g {
+  animation: kz-fade 2.6s 0.4s var(--kz-ease) both;
+}
+@keyframes kz-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.kz-title.show .kz-seal {
+  animation: kz-stamp 900ms 1.5s var(--kz-ease) both;
+}
+.kz-title.show .kz-romaji {
+  animation: kz-rise 1.6s 0.9s var(--kz-ease) both;
+}
+.kz-title.show .kz-rule {
+  animation: kz-draw 1.4s 1.2s var(--kz-ease) both;
+}
+@keyframes kz-ink-in {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); letter-spacing: 0.04em; }
+  to { opacity: 1; clip-path: inset(0 0 0 0); letter-spacing: -0.02em; }
+}
+@keyframes kz-stamp {
+  0% { opacity: 0; transform: translate(62%, 28%) rotate(-3deg) scale(1.6); }
+  60% { opacity: 1; transform: translate(62%, 28%) rotate(-3deg) scale(0.94); }
+  100% { opacity: 1; transform: translate(62%, 28%) rotate(-3deg) scale(1); }
+}
+@keyframes kz-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kz-draw {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* ---------------------------------------------------------------- menus */
+.kz-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: auto;
+}
+.kz-item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  height: clamp(44px, 5vh, 56px);
+  padding-left: 76px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: clamp(21px, 1.45vw, 27px);
+  letter-spacing: 0.1em;
+  color: var(--kz-bone-3);
+  text-shadow: var(--kz-shadow);
+  transition: color 420ms var(--kz-ease), transform 420ms var(--kz-ease);
+}
+.kz-item .kz-label {
+  transition: letter-spacing 520ms var(--kz-ease);
+}
+.kz-item .kz-mark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 60px;
+  height: 11px;
+  margin-top: -4px;
+  color: var(--kz-verm);
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 380ms var(--kz-ease);
+}
+.kz-item .kz-mark svg {
+  display: block;
+  width: 60px;
+  height: 11px;
+}
+.kz-item .kz-jp {
+  font-family: var(--kz-f-jp);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--kz-gold);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 420ms var(--kz-ease), transform 420ms var(--kz-ease);
+}
+.kz-item.on {
+  color: var(--kz-bone);
+}
+.kz-item.on .kz-label {
+  letter-spacing: 0.13em;
+}
+.kz-item.on .kz-mark {
+  clip-path: inset(0 0 0 0);
+}
+.kz-item.on .kz-jp {
+  opacity: 0.85;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------- option rows (settings, photo) */
+.kz-options {
+  pointer-events: auto;
+  min-width: 460px;
+}
+.kz-opt-h {
+  margin: 26px 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+}
+.kz-opt-h:first-child {
+  margin-top: 0;
+}
+.kz-opt-note {
+  margin-top: 16px;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--kz-bone-3);
+}
+.kz-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  height: 42px;
+  padding: 0 4px 0 22px;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--kz-bone-3);
+  cursor: pointer;
+  transition: color 300ms var(--kz-ease);
+}
+.kz-opt::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--kz-verm);
+  transform: scale(0);
+  transition: transform 300ms var(--kz-ease);
+}
+.kz-opt::after {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(242, 233, 216, 0.14), rgba(242, 233, 216, 0.03));
+}
+.kz-opt.on {
+  color: var(--kz-bone);
+}
+.kz-opt.on::before {
+  transform: scale(1);
+}
+.kz-opt-val {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  color: var(--kz-bone-2);
+}
+.kz-opt-val b {
+  font-weight: 500;
+  min-width: 64px;
+  text-align: center;
+  color: var(--kz-bone);
+}
+.kz-opt-slider .kz-opt-val b {
+  min-width: 56px;
+  text-align: right;
+}
+.kz-arrow {
+  font-style: normal;
+  font-size: 22px;
+  color: var(--kz-gold);
+  opacity: 0.4;
+  transition: opacity 250ms;
+}
+.kz-opt.on .kz-arrow {
+  opacity: 1;
+}
+.kz-track {
+  position: relative;
+  width: 170px;
+  height: 18px;
+  cursor: ew-resize;
+}
+.kz-track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(242, 233, 216, 0.26);
+}
+.kz-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--kz-gold);
+}
+.kz-knob {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--kz-bone);
+  box-shadow: 0 0 0 3px rgba(12, 10, 8, 0.4);
+}
+.kz-toggle {
+  position: relative;
+  width: 34px;
+  height: 14px;
+  border-radius: 7px;
+  border: 1px solid rgba(242, 233, 216, 0.4);
+}
+.kz-toggle i {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kz-bone-3);
+  transition: transform 300ms var(--kz-ease), background 300ms;
+}
+.kz-toggle.on {
+  border-color: var(--kz-gold);
+}
+.kz-toggle.on i {
+  transform: translateX(20px);
+  background: var(--kz-verm-hi);
+}
+
+/* ---------------------------------------------------------------- pause */
+.kz-pause {
+  background: radial-gradient(130% 110% at 0% 50%, rgba(9, 8, 6, 0.86) 0%, rgba(9, 8, 6, 0.62) 42%, rgba(9, 8, 6, 0.38) 100%);
+  -webkit-backdrop-filter: blur(5px) saturate(0.7);
+  backdrop-filter: blur(5px) saturate(0.7);
+  transition-duration: 380ms;
+}
+.kz-pause .kz-col {
+  position: absolute;
+  left: clamp(40px, 7.2vw, 150px);
+  top: clamp(80px, 15vh, 190px);
+}
+.kz-pause .kz-small-logo {
+  font-family: var(--kz-f-brush);
+  font-size: 64px;
+  line-height: 1;
+  filter: url(#kz-kanji);
+  color: var(--kz-bone);
+  margin-bottom: 8px;
+}
+.kz-pause .kz-small-romaji {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.6em;
+  color: var(--kz-bone-3);
+  margin-bottom: 52px;
+}
+.kz-pause .kz-side {
+  position: absolute;
+  right: clamp(40px, 7vw, 150px);
+  top: clamp(80px, 15vh, 190px);
+  width: min(560px, 40vw);
+}
+.kz-pause .kz-side .kz-sub {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+  margin-bottom: 14px;
+}
+.kz-pause .kz-quest-name {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.kz-pause .kz-quest-obj {
+  font-size: 21px;
+  font-style: italic;
+  color: var(--kz-bone-2);
+}
+.kz-legend {
+  position: absolute;
+  left: clamp(40px, 7.2vw, 150px);
+  right: clamp(40px, 7vw, 150px);
+  bottom: clamp(28px, 5vh, 58px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--kz-bone-3);
+}
+.kz-legend span b {
+  font-weight: 600;
+  color: var(--kz-bone-2);
+  margin-right: 8px;
+  letter-spacing: 0.04em;
+}
+.kz-panel-settings {
+  position: absolute;
+  right: clamp(40px, 7vw, 150px);
+  top: clamp(80px, 13vh, 160px);
+  max-height: 76vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
+  scrollbar-width: none;
+}
+.kz-panel-settings::-webkit-scrollbar {
+  display: none;
+}
+.kz-pause.settings-open .kz-side,
+.kz-pause.settings-open .kz-panel-map {
+  opacity: 0;
+}
+.kz-pause .kz-side,
+.kz-pause .kz-panel-settings,
+.kz-pause .kz-panel-map {
+  transition: opacity 450ms var(--kz-ease);
+}
+.kz-pause:not(.settings-open) .kz-panel-settings {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- the map (in the pause screen)
+   Light ink on the pause's dark, in the room right of the menu and below the objective: MapPanel.place() sets the box
+   (mapModel.inlineBox), clear of the menu, the objective, the controls hint and the letterbox's bars, and hides it
+   (.off) on a window too small for it. No frame and no paper: the terrain (the canvas) fades out toward its edges into
+   the blurred scene, over a dark wash that is feathered into nothing too. The markers and labels above it stay sharp.
+   Bone for land and paths, gold for the places and the objective, vermilion only for the samurai. The map takes no
+   input (the menu on the left stays clickable). */
+/* The fades: an ellipse that reaches past the box's sides, so that the places near the frame's corners still stand on
+   land, held to nothing at every edge by a ramp across each axis (the three masks multiply). The land's (--kz-map-fade)
+   lies inside the dark's (--kz-map-dark), so the land always fades out over the dark. The raster fades toward its
+   edges as well (mapModel.edgeFade). */
+.kz-panel-map {
+  --kz-map-fade:
+    radial-gradient(ellipse 62% 66% at 50% 50%, #000 0%, #000 50%, rgba(0, 0, 0, 0.84) 62%, rgba(0, 0, 0, 0.55) 75%, rgba(0, 0, 0, 0.24) 87%, rgba(0, 0, 0, 0.06) 95%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.4) 5%, rgba(0, 0, 0, 0.8) 10%, #000 15%, #000 85%, rgba(0, 0, 0, 0.8) 90%, rgba(0, 0, 0, 0.4) 95%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.4) 5%, rgba(0, 0, 0, 0.8) 10%, #000 15.5%, #000 84.5%, rgba(0, 0, 0, 0.8) 90%, rgba(0, 0, 0, 0.4) 95%, transparent 100%);
+  --kz-map-dark:
+    radial-gradient(ellipse 68% 72% at 50% 50%, #000 0%, #000 58%, rgba(0, 0, 0, 0.84) 70%, rgba(0, 0, 0, 0.52) 82%, rgba(0, 0, 0, 0.2) 92%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 4%, rgba(0, 0, 0, 0.85) 8%, #000 12%, #000 88%, rgba(0, 0, 0, 0.85) 92%, rgba(0, 0, 0, 0.45) 96%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.45) 4%, rgba(0, 0, 0, 0.85) 8%, #000 12%, #000 88%, rgba(0, 0, 0, 0.85) 92%, rgba(0, 0, 0, 0.45) 96%, transparent 100%);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  font-size: clamp(11.5px, 0.68vw, 14px);
+}
+.kz-panel-map.off,
+.kz-pause.from-title .kz-panel-map {
+  display: none;
+}
+/* the pause's wash thins out toward the right, over the bright field: the map brings its own dark, feathered into
+   nothing a little outside the land */
+.kz-panel-map::before,
+.kz-map-canvas {
+  -webkit-mask-composite: source-in, source-in;
+  mask-composite: intersect;
+}
+.kz-panel-map::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 7, 5, 0.9);
+  -webkit-mask-image: var(--kz-map-dark);
+  mask-image: var(--kz-map-dark);
+}
+.kz-map-view {
+  position: absolute;
+  inset: 0;
+}
+/* a new base fades in once it is painted (.ready) */
+.kz-map-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 600ms var(--kz-ease);
+  -webkit-mask-image: var(--kz-map-fade);
+  mask-image: var(--kz-map-fade);
+}
+.kz-map-canvas.ready {
+  opacity: 1;
+}
+.kz-map-overlay {
+  position: absolute;
+  inset: 0;
+}
+/* a marker is a zero-size anchor moved by translate(); what it draws is centred on it */
+.kz-map-pt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.kz-map-pt > i {
+  position: absolute;
+  display: block;
+  font-style: normal;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+}
+.kz-map-pt svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.kz-map-place {
+  --s: clamp(14px, 1vw, 19px);
+  color: var(--kz-gold);
+}
+.kz-map-place > i {
+  filter: drop-shadow(0 0 2px rgba(12, 10, 8, 0.95)) drop-shadow(0 0 5px rgba(12, 10, 8, 0.8));
+}
+.kz-map-horse {
+  --s: clamp(12px, 0.9vw, 17px);
+  color: var(--kz-bone);
+}
+.kz-map-horse > i {
+  filter: drop-shadow(0 0 2px rgba(12, 10, 8, 0.95));
+}
+.kz-map-obj {
+  --s: clamp(38px, 2.75vw, 54px);
+  color: var(--kz-gold);
+}
+.kz-map-you {
+  --s: clamp(28px, 2.2vw, 42px);
+}
+.kz-map-you .kz-map-halo {
+  --s: clamp(60px, 4.6vw, 88px);
+  background: radial-gradient(closest-side, rgba(12, 10, 8, 0.66) 0%, rgba(12, 10, 8, 0.4) 55%, rgba(12, 10, 8, 0) 100%);
+}
+.kz-map-you .kz-map-arrow path {
+  fill: var(--kz-verm-hi);
+  stroke: var(--kz-ink);
+  stroke-width: 2.2px;
+  paint-order: stroke;
+  stroke-linejoin: round;
+}
+.kz-map-you.pinned {
+  opacity: 0.78;
+}
+/* the objective's ring breathes while the pause is up (the transform lives on the wrapper, outside the filtered
+   path, so nothing is rasterised again); still under reduced motion */
+.kz-pause.show .kz-map-ring {
+  animation: kz-map-breathe 4.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes kz-map-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.88; }
+  50% { transform: scale(1.12); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kz-pause.show .kz-map-ring {
+    animation: none;
+    will-change: auto;
+  }
+}
+.kz-map-label,
+.kz-map-objlabel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(12, 10, 8, 0.95), 0 0 13px rgba(12, 10, 8, 0.85), 0 1px 1px rgba(12, 10, 8, 0.9);
+}
+.kz-map-label {
+  font-size: 1.05em;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+}
+.kz-map-label-horse {
+  font-weight: 500;
+  color: var(--kz-bone);
+}
+.kz-map-objlabel .tag {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+}
+.kz-map-objlabel .name {
+  display: block;
+  font-size: 1.75em;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  color: var(--kz-bone);
+}
+/* hairlines: the north mark and the scale bar, on the right, where the land starts to fade */
+.kz-map-north {
+  position: absolute;
+  right: 11%;
+  top: 11%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 4px;
+  color: var(--kz-bone-2);
+}
+.kz-map-north svg {
+  display: block;
+  width: 1.9em;
+  height: 4.2em;
+}
+.kz-map-north span {
+  font-size: 1.05em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  padding-left: 0.2em;
+  color: var(--kz-gold);
+}
+.kz-map-scale {
+  position: absolute;
+  right: 11%;
+  bottom: 12%;
+  color: var(--kz-bone-2);
+}
+.kz-map-scale i {
+  display: block;
+  height: 6px;
+  border: 1px solid currentColor;
+  border-top: 0;
+}
+.kz-map-scale span {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.25em;
+  letter-spacing: 0.14em;
+}
+
+/* ---------------------------------------------------------------- HUD */
+/* --kz-bar (src/ui/bars.js, on #ui) is the height of one film-letterbox bar in px, 0 with the letterbox off: the HUD,
+   the toast and the quest card are placed from the picture's edge, not the screen's, so the bars stay clean black. */
+.kz-hud {
+  transition-duration: 700ms;
+}
+.kz-hud .kz-vitals {
+  position: absolute;
+  left: clamp(34px, 4vw, 70px);
+  bottom: calc(var(--kz-bar, 0px) + clamp(30px, 5.2vh, 60px));
+  transition: opacity 1.4s var(--kz-ease);
+}
+.kz-hud .kz-vitals.idle {
+  opacity: 0;
+}
+.kz-health {
+  position: relative;
+  width: 300px;
+  height: 16px;
+}
+.kz-health > div {
+  position: absolute;
+  inset: 0;
+}
+.kz-health svg {
+  display: block;
+  width: 300px;
+  height: 16px;
+}
+.kz-health .kz-hp-bg {
+  color: rgba(242, 233, 216, 0.16);
+}
+.kz-health .kz-hp-lag {
+  color: var(--kz-verm-hi);
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 900ms 380ms var(--kz-ease);
+}
+.kz-health .kz-hp {
+  color: var(--kz-bone);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 160ms linear, color 600ms;
+}
+.kz-health.low .kz-hp {
+  color: var(--kz-verm-hi);
+}
+.kz-resolve {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0 0 6px;
+}
+.kz-pip {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  color: rgba(242, 233, 216, 0.55);
+}
+.kz-pip svg {
+  position: absolute;
+  inset: 0;
+}
+.kz-pip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--kz-gold);
+  box-shadow: 0 0 10px rgba(217, 181, 111, 0.8);
+  transform: scale(0);
+  transition: transform 500ms var(--kz-ease);
+}
+.kz-pip.full {
+  color: var(--kz-gold);
+}
+.kz-pip.full::after {
+  transform: scale(1);
+}
+.kz-objective {
+  position: absolute;
+  left: clamp(34px, 4vw, 70px);
+  top: calc(var(--kz-bar, 0px) + clamp(30px, 5vh, 56px));
+  max-width: 520px;
+  text-shadow: var(--kz-shadow);
+  transition: opacity 1.6s var(--kz-ease), transform 1.6s var(--kz-ease);
+}
+.kz-objective.idle {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+/* soft ink washes keep the HUD legible over bright skies and sunlit grass (they fade with their element) */
+/* (no isolation here: the washes must multiply with the rendered frame underneath) */
+.kz-objective::before,
+.kz-vitals::before,
+.kz-prompt::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.kz-objective::before {
+  left: -140px;
+  top: -110px;
+  width: 820px;
+  height: 330px;
+}
+.kz-vitals::before {
+  left: -150px;
+  bottom: -110px;
+  width: 640px;
+  height: 280px;
+}
+.kz-prompt::before {
+  left: -60px;
+  right: -60px;
+  top: -34px;
+  bottom: -34px;
+}
+.kz-hud.standoff .kz-objective,
+.kz-hud.standoff .kz-vitals,
+.kz-hud.cinema .kz-objective,
+.kz-hud.cinema .kz-vitals {
+  opacity: 0 !important;
+}
+.kz-objective .kz-qt {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--kz-gold-pale);
+  text-shadow: var(--kz-shadow-strong);
+}
+.kz-objective .kz-qt-rule {
+  display: block;
+  margin: 7px 0 9px -3px;
+  color: var(--kz-gold-2);
+}
+.kz-objective .kz-qo {
+  font-size: 21px;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--kz-bone);
+}
+.kz-prompt {
+  position: absolute;
+  left: 50%;
+  /* its place with no bars, or a gap above the bottom bar if that is higher (on 16:9 the two are the same place) */
+  bottom: max(clamp(96px, 15vh, 170px), calc(var(--kz-bar, 0px) + clamp(16px, 2.2vh, 28px)));
+  transform: translateX(-50%) translateY(6px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-shadow: var(--kz-shadow);
+  opacity: 0;
+  transition: opacity 400ms var(--kz-ease), transform 400ms var(--kz-ease);
+}
+.kz-prompt.show {
+  opacity: 1;
+  transform: translateX(-50%);
+}
+.kz-key {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  box-sizing: border-box;
+  border: 1px solid rgba(242, 233, 216, 0.7);
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--kz-bone);
+  background: rgba(12, 10, 8, 0.28);
+}
+.kz-key.wide {
+  border-radius: 15px;
+}
+.kz-dmg {
+  position: absolute;
+  /* the picture only (the vignette is drawn in the corners of the box): the film letterbox's bars stay black */
+  inset: var(--kz-bar, 0px) 0;
+  opacity: 0;
+  background: radial-gradient(120% 120% at 50% 50%, transparent 52%, rgba(90, 10, 4, 0.55) 86%, rgba(40, 3, 1, 0.85) 100%);
+  transition: opacity 1.4s var(--kz-ease);
+}
+.kz-dmg.flash {
+  opacity: 0.9;
+  transition: opacity 80ms;
+}
+.kz-dmg.low {
+  animation: kz-pulse 1.9s ease-in-out infinite;
+}
+@keyframes kz-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.72; }
+}
+
+/* ---------------------------------------------------------------- cards (quest, toast, standoff, death, ending) */
+.kz-card {
+  position: absolute;
+  left: 50%;
+  /* 34% down the screen. With the bars on, its centre is also at least max(17% of the height, 130px) below the top
+     bar: a card up to 260px tall (202px, or 243px with a wrapped title) keeps its first line off the bar on a squarer
+     or a smaller window. Where 34% is already further down than that (most 16:9 and 16:10 windows), nothing moves */
+  top: max(34%, calc(var(--kz-bar, 0px) + max(17%, 130px)));
+  transform: translate(-50%, -50%);
+  text-align: center;
+  text-shadow: var(--kz-shadow);
+  opacity: 0;
+  transition: opacity 1.2s var(--kz-ease);
+}
+.kz-card.show {
+  opacity: 1;
+}
+.kz-card .kz-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.52em;
+  text-transform: uppercase;
+  color: var(--kz-gold-pale);
+  text-shadow: var(--kz-shadow-strong);
+  margin-bottom: 18px;
+  padding-left: 0.52em;
+}
+.kz-card::before {
+  /* warm ink cloud behind the card: legible over the brightest golden-hour sky */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 170%;
+  height: 230%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+}
+.kz-card .kz-card-jp {
+  font-family: var(--kz-f-brush);
+  font-size: 84px;
+  line-height: 1.05;
+  margin-bottom: 10px;
+}
+.kz-card .kz-card-title {
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  padding-left: 0.26em;
+}
+.kz-card .kz-card-rule {
+  display: block;
+  margin: 18px auto 0;
+  color: var(--kz-verm);
+}
+.kz-card.show .kz-card-rule {
+  animation: kz-draw 1.3s 0.3s var(--kz-ease) both;
+}
+.kz-card.show .kz-card-jp > .i {
+  animation: kz-ink-in 1.8s var(--kz-ease) both;
+}
+.kz-toast {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--kz-bar, 0px) + clamp(40px, 8vh, 90px));
+  transform: translateX(-50%);
+  font-size: 19px;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--kz-bone);
+  text-shadow: var(--kz-shadow-strong);
+  opacity: 0;
+  transition: opacity 600ms var(--kz-ease);
+}
+.kz-toast::before {
+  content: '';
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  top: -70px;
+  bottom: -70px;
+  z-index: -1;
+  pointer-events: none;
+}
+.kz-toast.show {
+  opacity: 1;
+}
+.kz-standoff .kz-so-wash {
+  position: absolute;
+  right: -6vw;
+  top: 50%;
+  width: 30vw;
+  height: 78vh;
+  transform: translateY(-50%);
+}
+.kz-standoff .kz-so-kanji {
+  position: absolute;
+  right: clamp(40px, 6vw, 120px);
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-family: var(--kz-f-brush);
+  font-size: 104px;
+  color: rgba(242, 233, 216, 0.9);
+}
+.kz-standoff .kz-so-kanji > .g {
+  writing-mode: vertical-rl;
+}
+.kz-standoff .kz-so-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 4.2vh;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-style: italic;
+  letter-spacing: 0.14em;
+  color: var(--kz-bone-2);
+}
+.kz-standoff.show .kz-so-kanji > .i {
+  animation: kz-ink-down 2.2s var(--kz-ease) both;
+}
+@keyframes kz-ink-down {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+.kz-fullcard {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: radial-gradient(120% 120% at 50% 45%, rgba(12, 10, 8, 0.72) 0%, rgba(8, 7, 5, 0.94) 70%);
+  transition-duration: 1.8s;
+}
+.kz-fullcard .kz-big {
+  font-family: var(--kz-f-brush);
+  font-size: clamp(120px, 13vw, 230px);
+  line-height: 1;
+  margin-bottom: 26px;
+}
+.kz-fullcard .kz-big > .i {
+  filter: url(#kz-logo);
+}
+.kz-fullcard .kz-line {
+  font-size: clamp(24px, 2vw, 34px);
+  font-style: italic;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.kz-fullcard .kz-subline {
+  font-size: 16px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--kz-bone-3);
+}
+.kz-fullcard.show .kz-big > .i {
+  animation: kz-ink-in 2.6s 0.4s var(--kz-ease) both;
+}
+.kz-fullcard.show .kz-big > .g {
+  animation: kz-fade 2.6s 0.8s var(--kz-ease) both;
+}
+.kz-fullcard .kz-subline {
+  color: rgba(242, 233, 216, 0.6);
+}
+.kz-fullcard.show .kz-line {
+  animation: kz-rise 1.6s 1.6s var(--kz-ease) both;
+}
+.kz-fullcard.show .kz-subline {
+  animation: kz-rise 1.6s 2.6s var(--kz-ease) both;
+}
+.kz-fullcard .kz-menu {
+  margin-top: 40px;
+  display: inline-block;
+  text-align: left;
+}
+
+/* ---------------------------------------------------------------- credits */
+.kz-credits {
+  background: rgba(9, 8, 6, 0.72);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.kz-credits .kz-cred {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.kz-credits .kz-cred h2 {
+  margin: 0 0 40px;
+  font-weight: 400;
+  font-size: 30px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+}
+.kz-credits .kz-cred p {
+  margin: 0 0 22px;
+}
+.kz-credits .kz-cred p small {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+  margin-bottom: 6px;
+}
+.kz-credits .kz-cred p span {
+  font-size: 21px;
+  font-style: italic;
+  color: var(--kz-bone-2);
+}
+
+/* ---------------------------------------------------------------- photo mode */
+.kz-photo::before {
+  /* shade the frame behind the panel: an ellipse anchored on the right edge, no hard band */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: brightness(0.42) saturate(0.95);
+  backdrop-filter: brightness(0.42) saturate(0.95);
+  -webkit-mask-image: radial-gradient(ellipse 52% 78% at 100% 50%, #000 0%, rgba(0, 0, 0, 0.85) 45%, rgba(0, 0, 0, 0.3) 75%, transparent 100%);
+  mask-image: radial-gradient(ellipse 52% 78% at 100% 50%, #000 0%, rgba(0, 0, 0, 0.85) 45%, rgba(0, 0, 0, 0.3) 75%, transparent 100%);
+  transition: opacity 400ms var(--kz-ease);
+}
+.kz-photo .kz-opt {
+  color: var(--kz-bone-2);
+}
+.kz-photo .kz-opt.on {
+  color: var(--kz-bone);
+}
+.kz-photo.hide-ui::before {
+  opacity: 0;
+}
+.kz-photo .kz-photo-panel {
+  position: absolute;
+  right: clamp(40px, 5vw, 96px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 0 8px 36px;
+  border-left: 1px solid rgba(217, 181, 111, 0.28);
+  transition: opacity 400ms var(--kz-ease);
+}
+.kz-photo .kz-photo-panel .kz-options {
+  min-width: 420px;
+}
+.kz-photo .kz-photo-title {
+  font-family: var(--kz-f-brush);
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 4px;
+  filter: url(#kz-kanji);
+}
+.kz-photo .kz-photo-sub {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--kz-gold);
+  margin-bottom: 22px;
+}
+.kz-photo .kz-photo-keys {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-size: 14px;
+  color: var(--kz-bone-3);
+}
+.kz-photo .kz-photo-keys b {
+  color: var(--kz-bone-2);
+  font-weight: 600;
+  margin-right: 6px;
+}
+.kz-photo.hide-ui .kz-photo-panel {
+  opacity: 0;
+}
+.kz-photo .kz-drag {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+}
+.kz-photo .kz-drag:active {
+  cursor: grabbing;
+}
+.kz-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.kz-flash.go {
+  animation: kz-flash 520ms ease-out;
+}
+@keyframes kz-flash {
+  0% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+/* ---------------------------------------------------------------- ink transition canvas */
+.kz-ink {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ui *,
+  #ui *::before,
+  #ui *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+  }
+}

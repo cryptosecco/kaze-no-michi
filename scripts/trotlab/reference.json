@@ -1,0 +1,1394 @@
+{
+  "_meta": {
+    "version": 1,
+    "date": "2026-10-04",
+    "by": "literature review",
+    "horse": "native Japanese horse (Kiso / Misaki / Taishū type), 1.35 m at the withers, ~330 kg; hip joint 0.98 m, shoulder joint 1.00 m above the ground",
+    "scaling": "dynamic similarity (Alexander & Jayes 1983): at equal Froude number Fr = v²/(g·h_hip) angles, fractions, duty factors and lengths/h are equal; lengths ×(h/h_ref), times ×√(h/h_ref), speeds ×√(h/h_ref). 4.0 m/s → Fr 1.66 (= a Warmblood with a 1.20 m hip at 4.4 m/s, Clayton's 1994 medium trot; = an Icelandic horse of 1.41 m at 4.1 m/s); 3.2 m/s → Fr 1.07; 5.0 m/s → Fr 2.60",
+    "conventions": "angles between the origins of the rig's bones (definitions in docs/trot-lab.md): compare excursions and changes relative to the square stand, not absolute values; notes give the source (author, year) of each literature-derived range, and the 'engineering tolerance' entries are limits of the instrument, not literature values"
+  },
+  "stride.freq_hz": {
+    "lo": 1.45,
+    "hi": 1.8,
+    "unit": "Hz",
+    "note": "Clayton 1994 medium trot (Fr 1.67): 1.37 Hz at h 1.22 m → 1.53 Hz scaled; ridden Icelandic horses at Fr ~1.7 (Rhodin 2022, stride 0.59 s) → 1.73 Hz; Alexander & Jayes λ/h = 2.3·Fr^0.3 → 1.52 Hz. Ponies: a higher stride frequency than Warmbloods",
+    "dim": "timing",
+    "main": true
+  },
+  "stride.length_m": {
+    "lo": 2.2,
+    "hi": 2.8,
+    "unit": "m",
+    "note": "v/f with the frequency above: 4.0/1.80…4.0/1.45; Alexander & Jayes 1983 → 2.62 m; Icelandic horses ~2.3 m at equal Fr",
+    "dim": "timing",
+    "main": true
+  },
+  "stride.period_s": {
+    "lo": 0.555,
+    "hi": 0.69,
+    "unit": "s",
+    "note": "1/frequency (same sources as stride.freq_hz)",
+    "dim": "timing",
+    "main": false
+  },
+  "stride.speed_mps": {
+    "lo": 3.9,
+    "hi": 4.1,
+    "unit": "m/s",
+    "note": "scenario check, not biomechanics",
+    "dim": "timing",
+    "main": false
+  },
+  "duty.fore": {
+    "lo": 0.35,
+    "hi": 0.48,
+    "unit": "fraction",
+    "note": "trot: 0.35–0.42 in collected trot (Clayton & Hobbs 2019, from Clayton 1997 and Holmström 1994); 0.46–0.49 in hand trot with IMUs (Rhodin 2022: WB 0.49, Iberian 0.49, Icelandic 0.46); duty factor falls with speed (Weishaupt 2010). Fore ≥ hind at the trot (Rhodin 2022; Biknevicius 2006)",
+    "dim": "timing",
+    "main": true
+  },
+  "duty.hind": {
+    "lo": 0.32,
+    "hi": 0.46,
+    "unit": "fraction",
+    "note": "Rhodin 2022: hind 0.39 (WB), 0.43 (Iberian), 0.42–0.46 (Icelandic); as a rule a little below the fore at the trot",
+    "dim": "timing",
+    "main": true
+  },
+  "suspension.frac": {
+    "lo": 0.04,
+    "hi": 0.25,
+    "unit": "fraction",
+    "note": "total of the two suspensions: 2–4 % in hand at low speed (Rhodin 2022), 76 ms per phase in high-level collected trot (Clayton 1997 via Clayton & Hobbs 2019), plateau ~90 ms per phase at the higher speeds (Weishaupt 2010); at Fr 1.66 ~5–20 % expected",
+    "dim": "timing",
+    "main": true
+  },
+  "suspension.count": {
+    "lo": 2,
+    "hi": 2,
+    "unit": "/stride",
+    "note": "two suspensions per stride (one after each diagonal) at Fr > ~1 (Clayton & Hobbs 2019)",
+    "dim": "timing",
+    "main": false
+  },
+  "diag.dap_td_ms": {
+    "lo": -20,
+    "hi": 35,
+    "unit": "ms",
+    "note": "dissociation at touchdown (DAP): +29.8 ± 7.6 ms in quality SWB stallions (Holmström 1994); in hand trot WB −2.6 % of the stride ≈ −20 ms, Iberian −1.2 % (Rhodin 2022); with speed it tends toward hind first (Hobbs, Bertram & Clayton 2016). Kiso / Misaki / Taishū lack the DMRT3 allele for ambling gaits (Chandra Paul 2020) → a diagonal trot, not the −4.8 % of Icelandic horses",
+    "dim": "timing",
+    "main": true
+  },
+  "diag.dap_td_ms.LF_RH": {
+    "lo": -25,
+    "hi": 40,
+    "unit": "ms",
+    "note": "as diag.dap_td_ms, single diagonal (variability between diagonals: Hobbs 2016)",
+    "dim": "timing",
+    "main": false
+  },
+  "diag.dap_td_ms.RF_LH": {
+    "lo": -25,
+    "hi": 40,
+    "unit": "ms",
+    "note": "as diag.dap_td_ms, single diagonal",
+    "dim": "timing",
+    "main": false
+  },
+  "diag.dap_lo_ms": {
+    "lo": -10,
+    "hi": 60,
+    "unit": "ms",
+    "note": "'lift-off is almost always hind first' (Clayton & Hobbs 2019); estimate: dap_td + (fore stance − hind stance), with fore stances 0–70 ms longer (Rhodin 2022) → ~0…+50 ms",
+    "dim": "timing",
+    "main": true
+  },
+  "diag.dap_lo_ms.LF_RH": {
+    "lo": -20,
+    "hi": 70,
+    "unit": "ms",
+    "note": "as diag.dap_lo_ms, single diagonal",
+    "dim": "timing",
+    "main": false
+  },
+  "diag.dap_lo_ms.RF_LH": {
+    "lo": -20,
+    "hi": 70,
+    "unit": "ms",
+    "note": "as diag.dap_lo_ms, single diagonal",
+    "dim": "timing",
+    "main": false
+  },
+  "contact.slip_mm.fore": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "engineering tolerance: the impact slip (1–4 cm, ~20 ms: Holden-Douilly 2013 at 7 m/s on sand; Pardoe 2001) falls in the excluded first 10 %; after that the hoof is stationary until the heel lifts on hard ground (Clayton, Mechanics of equine locomotion). Consistent with the 8 / 20 mm limits",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.slip_mm.hind": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as contact.slip_mm.fore",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "whole contact: impact slip (≤ 2–3 cm on hard ground) + displacement of the sole centre as the hoof rotates about the toe (r·(1−cos θ), r ≈ 57 mm: ~15–30 mm at 45–60°)",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.slip_full_mm.fore": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.slip_full_mm.hind": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.scrape_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "a sound horse does not scrape its hooves at the trot (toe dragging is a clinical sign); measurement tolerance",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.scrape_per_stride": {
+    "lo": 0,
+    "hi": 0.1,
+    "unit": "/stride",
+    "note": "as contact.scrape_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "the game's ground is rigid: the hoof must not enter it; engineering tolerance (hard limit 10 mm)",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "at mid-stance the sole is on the ground; ±2 mm of measurement tolerance",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.float_mm.fore": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as contact.float_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.float_mm.hind": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as contact.float_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.td_hvel_mps.fore": {
+    "lo": 0.3,
+    "hi": 2,
+    "unit": "m/s",
+    "note": "ground speed matching: long late-swing retraction in the forelimbs (~22 % of the stride: Holmström 1994, Clayton & Hobbs 2019); on the treadmill at 4.4 m/s the fore hoof lands at −2.5 ± 0.7 m/s in the laboratory frame ≈ +1.9 m/s relative to the belt (Reiser et al. 2005, converted here); ×0.9 for the size, mean over the last 1/60 s",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.td_hvel_mps.hind": {
+    "lo": 0.8,
+    "hi": 3.2,
+    "unit": "m/s",
+    "note": "short hind retraction (~5 % of the stride): horizontal velocity at impact greater than in the fore (Back et al. 1995 AJVR; Clayton & Hobbs 2019) but always below the trunk speed (the hoof is already retracting)",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.td_vvel_mps.fore": {
+    "lo": -2.5,
+    "hi": -0.6,
+    "unit": "m/s",
+    "note": "Reiser et al. 2005: −1.9 ± 0.5 m/s at the trot at 4.4 m/s; ×0.9 for the size; vertical velocity fore > hind (Back et al. 1995 AJVR)",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.td_vvel_mps.hind": {
+    "lo": -2.2,
+    "hi": -0.3,
+    "unit": "m/s",
+    "note": "lower than in the fore (Back et al. 1995 AJVR); wide range, no direct value",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.td_pitch_deg.fore": {
+    "lo": -1,
+    "hi": 8,
+    "unit": "°",
+    "note": "sound horses on hard ground: heel-first or flat landing, toe-first is atypical (Clayton 1990; Gorissen 2018: adults prefer a heel-first or lateral-first landing)",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.td_pitch_deg.hind": {
+    "lo": -1,
+    "hi": 8,
+    "unit": "°",
+    "note": "as contact.td_pitch_deg.fore",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.breakover_toe_slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "in breakover the hoof rotates about the stationary toe (Clayton, Mechanics of equine locomotion); a few mm of twist / slip",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.breakover_toe_slip_mm.fore": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "as contact.breakover_toe_slip_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.breakover_toe_slip_mm.hind": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "as contact.breakover_toe_slip_mm",
+    "dim": "contact",
+    "main": false
+  },
+  "contact.breakover_at.fore": {
+    "lo": 0.68,
+    "hi": 0.88,
+    "unit": "fraction",
+    "note": "breakover 70–77 ms of a ~330 ms stance (Gottleib et al. 2025, hoof-mounted IMU, asphalt) → heel up at ~0.78 of the contact; 1 = flat lift-off, which a real horse does not do",
+    "dim": "contact",
+    "main": true
+  },
+  "contact.breakover_at.hind": {
+    "lo": 0.68,
+    "hi": 0.88,
+    "unit": "fraction",
+    "note": "as contact.breakover_at.fore (no direct hind data: same digit mechanics)",
+    "dim": "contact",
+    "main": true
+  },
+  "trunk.withers_dy_mm": {
+    "lo": 40,
+    "hi": 85,
+    "unit": "mm",
+    "note": "withers peak-to-peak: WB 86–94 mm (5–95 %: 66–106; Hardeman 2020) and 92 mm (Rhodin 2022) ×0.82 → 54–87; Icelandic 47 mm (Rhodin 2022); spring-mass estimate for duty 0.36–0.44 at 1.5 Hz: 46–65 mm",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.sacrum_dy_mm": {
+    "lo": 45,
+    "hi": 87,
+    "unit": "mm",
+    "note": "sacrum (croup): WB 90–96 mm (5–95 %: 77–106; Hardeman 2020), 89 mm (Rhodin 2022) ×0.82 → 63–87; Icelandic 56 mm; trunk COM 86 ± 18 mm at 4.4 m/s in ridden Lusitanos (Hobbs & Clayton 2019) ×0.82 → 71",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.body_dy_mm": {
+    "lo": 40,
+    "hi": 80,
+    "unit": "mm",
+    "note": "trunk centre: BCM (body centre of mass) 53 ± 6 mm, 27 % less than the outer trunk (Buchner 2000); Hobbs & Clayton 2019 as above",
+    "dim": "trunk",
+    "main": false
+  },
+  "trunk.withers_min_at_stance": {
+    "lo": 0.35,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "minima at mid-stance: withers at 39–42 % of the fore stance (medians, IQR ±4–6; Rhodin 2022); 'high at touchdown and lift-off, lowest at mid-stance' (Hobbs & Clayton 2019). Translated onto the diagonal union with DAP 0…+30 ms",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.sacrum_min_at_stance": {
+    "lo": 0.35,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "sacrum at 37–45 % of the hind stance (Rhodin 2022)",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.body_min_at_stance": {
+    "lo": 0.35,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "as above (trunk centre)",
+    "dim": "trunk",
+    "main": false
+  },
+  "trunk.flight_accel_mps2": {
+    "lo": -11.8,
+    "hi": -7.8,
+    "unit": "m/s²",
+    "note": "in suspension the trunk is in free fall: −9.81 m/s²; ±20 % for the transients at the edges of the aerial phase (hard limit ±30 %)",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.pitch_deg": {
+    "lo": 0.8,
+    "hi": 4,
+    "unit": "°",
+    "note": "trunk pitch: ROM 0.9–1.4° per diagonal (Hobbs, Bertram & Clayton 2016); vertebrae 2.8–4.9° (Faber 2001, bone-mounted markers); one cycle per diagonal, i.e. two per stride (Hardeman 2020)",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.roll_deg": {
+    "lo": 2,
+    "hi": 7,
+    "unit": "°",
+    "note": "axial rotation of the thoracic vertebrae: 3.1–3.3° (T10, T13) up to 4.6–5.8° (others; Faber 2001, 4 m/s, bone-mounted markers)",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.pelvis_roll_deg": {
+    "lo": 4,
+    "hi": 12,
+    "unit": "°",
+    "note": "pelvis roll in straight-line trot: median 8.5° (5–95 %: 5.8–9.1) on a hard surface, 9.7° (6.4–12.9) on a soft one (Hardeman 2020); angles are size-invariant",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.lateral_mm": {
+    "lo": 10,
+    "hi": 35,
+    "unit": "mm",
+    "note": "mediolateral oscillation: BCM 19 ± 4 mm, the trunk 34 % more (~29 mm) (Buchner 2000) ×0.82 → ~15–25 mm",
+    "dim": "trunk",
+    "main": true
+  },
+  "trunk.withers_lateral_mm": {
+    "lo": 15,
+    "hi": 60,
+    "unit": "mm",
+    "note": "lateral oscillation of the trunk plus the roll of the thorax (~3–5°) at ~0.5 m above the axis; estimate",
+    "dim": "trunk",
+    "main": false
+  },
+  "head.poll_dy_mm": {
+    "lo": 40,
+    "hi": 90,
+    "unit": "mm",
+    "note": "head peak-to-peak in hand trot: WB 67–71 mm (5–95 %: 52–100; Hardeman 2020), 78 mm (Rhodin 2022), Iberian 64, Icelandic 61 (in hand) and 69 (ridden); ×0.82 for the WB",
+    "dim": "head",
+    "main": true
+  },
+  "head.muzzle_dy_mm": {
+    "lo": 40,
+    "hi": 105,
+    "unit": "mm",
+    "note": "as the poll plus the pitch of the head",
+    "dim": "head",
+    "main": false
+  },
+  "head.lag_ms": {
+    "lo": -15,
+    "hi": 40,
+    "unit": "ms",
+    "note": "difference between the head and withers minima: WB −3.3 %, Iberian −1.6 %, Icelandic +1.1 % of the stride (head later: a negative value in Rhodin's 2022 convention) → ~−7…+26 ms",
+    "dim": "head",
+    "main": true
+  },
+  "fore.carpus_stance_dev_deg": {
+    "lo": 3,
+    "hi": 20,
+    "unit": "°",
+    "note": "the carpus 'snaps into hyperextension' at the start of stance (Back et al. 1995a) and begins to flex at the end of stance: ROM in stance 15 ± 6° (Clayton et al. 2004, bone-mounted markers)",
+    "dim": "limbs",
+    "main": false
+  },
+  "fore.carpus_max_flex_deg": {
+    "lo": 60,
+    "hi": 100,
+    "unit": "°",
+    "note": "carpus in swing: ROM 76 ± 13° (Clayton et al. 2004); minimum angle 99° → 81° of flexion in the Bardigiano (Martuzzi et al. 2009); grows with speed (Cruz et al. 2018)",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.carpus_max_flex_at_swing": {
+    "lo": 0.3,
+    "hi": 0.6,
+    "unit": "fraction",
+    "note": "flexion begins at the end of stance and continues until mid-swing (Clayton et al. 2004)",
+    "dim": "limbs",
+    "main": false
+  },
+  "fore.fetlock_ext_deg": {
+    "lo": 18,
+    "hi": 38,
+    "unit": "°",
+    "note": "extension beyond the standing value at mid-stance: fetlock standing ~145–150° dorsal, at mid-stance ~121° (Martuzzi et al. 2009) → ~25–30°; proportional to the vertical force (McGuigan & Wilson 2003; Clayton). The standing rig (−30.5°) is anatomical",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.fetlock_ext_at_stance": {
+    "lo": 0.35,
+    "hi": 0.6,
+    "unit": "fraction",
+    "note": "maximum extension at mid-stance, with the metacarpus vertical and at peak vertical force (Clayton, Mechanics of equine locomotion); fore GRF peak at 43–48 % of stance (Hobbs, Bertram & Clayton 2016)",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.elbow_rom_deg": {
+    "lo": 40,
+    "hi": 70,
+    "unit": "°",
+    "note": "elbow 91–146° → ROM ~54° (Martuzzi et al. 2009, Bardigiano); the elbow never reaches full extension (max ~146°)",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.shoulder_rom_deg": {
+    "lo": 15,
+    "hi": 40,
+    "unit": "°",
+    "note": "scapulohumeral joint: ROM of a few tens of degrees (Back et al. 1995a; Morales 1998); estimate, no direct value accessible — wide range",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.scap_rom_deg": {
+    "lo": 12,
+    "hi": 30,
+    "unit": "°",
+    "note": "pendular rotation of the scapula in sync with the limb (Back et al. 1995a); protraction–retraction of the whole limb 39.5° at 4.4 m/s (Hobbs & Clayton 2019), of which the scapula is about half; estimate",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.carpus_rom_deg": {
+    "lo": 65,
+    "hi": 105,
+    "unit": "°",
+    "note": "Clayton 2004 (76 ± 13 in swing + hyperextension in stance); Martuzzi 2009 ~81°",
+    "dim": "limbs",
+    "main": false
+  },
+  "fore.fetlock_rom_deg": {
+    "lo": 65,
+    "hi": 100,
+    "unit": "°",
+    "note": "fore fetlock: flexion–extension 77 ± 5° at the trot (Clayton et al. 2007, bone-mounted markers); 121–213° → ~92° (Martuzzi 2009): extension in stance + strong flexion in swing",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.hoof_max_h_mm": {
+    "lo": 70,
+    "hi": 150,
+    "unit": "mm",
+    "note": "hoof height in swing: 13–14 cm (early peak) and ~12 cm (late peak) in adult horses at ~3 m/s (Gottleib et al. 2025); ×0.82 for the size, a little more for the speed; the Japanese native horses are not high-action horses",
+    "dim": "limbs",
+    "main": true
+  },
+  "fore.hoof_max_h_at_swing": {
+    "lo": 0.15,
+    "hi": 0.5,
+    "unit": "fraction",
+    "note": "the toe arc peaks shortly after lift-off, then follows a low path with a second small rise before touchdown (Clayton 1990; Clayton, Mechanics…; Gottleib 2025)",
+    "dim": "limbs",
+    "main": false
+  },
+  "hind.hock_stance_yield_deg": {
+    "lo": 8,
+    "hi": 25,
+    "unit": "°",
+    "note": "the hock flexes during impact / loading and extends at the end of stance (Back et al. 1995b; Gnagey et al. 2006; Holmström 1994); magnitude estimated",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.hock_max_flex_deg": {
+    "lo": 35,
+    "hi": 60,
+    "unit": "°",
+    "note": "maximum flexion in swing beyond the standing value: tarsus ROM ~54° (97–152°, Martuzzi 2009), with the end-of-stance extension close to the standing angle (150–165°, Gnagey 2006) → ~45–55° beyond standing",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.hock_max_flex_at_swing": {
+    "lo": 0.25,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "hock, stifle and fetlock flex together (reciprocal apparatus) in the first half of swing (Back et al. 1995b; Clayton)",
+    "dim": "limbs",
+    "main": false
+  },
+  "hind.stifle_rom_deg": {
+    "lo": 30,
+    "hi": 55,
+    "unit": "°",
+    "note": "stifle 120–161° → ROM ~41° (Martuzzi 2009); coupled to the hock by the reciprocal apparatus",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.hock_rom_deg": {
+    "lo": 40,
+    "hi": 68,
+    "unit": "°",
+    "note": "tarsus ROM ~54° (Martuzzi 2009); the hock never reaches full extension (maximum ~152–165°, Martuzzi 2009, Gnagey 2006)",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.hip_rom_deg": {
+    "lo": 18,
+    "hi": 40,
+    "unit": "°",
+    "note": "hip 105–127° → ROM ~22° (Martuzzi 2009); protraction–retraction of the whole limb 44.6° at 4.4 m/s (Hobbs & Clayton 2019) with the contribution of the pelvis and the distal joints",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.fetlock_ext_deg": {
+    "lo": 12,
+    "hi": 32,
+    "unit": "°",
+    "note": "the hind fetlock extends less than the fore (hind GRF peak ~8.3–9.4 N/kg against ~11 fore: Hobbs, Bertram & Clayton 2016)",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.fetlock_ext_at_stance": {
+    "lo": 0.3,
+    "hi": 0.6,
+    "unit": "fraction",
+    "note": "with the hind vertical force peak, at 40–45 % of stance (Hobbs, Bertram & Clayton 2016)",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.fetlock_rom_deg": {
+    "lo": 55,
+    "hi": 95,
+    "unit": "°",
+    "note": "hind fetlock: extension in stance and flexion in swing coupled to the hock and stifle (Back et al. 1995b); estimate",
+    "dim": "limbs",
+    "main": false
+  },
+  "hind.hoof_max_h_mm": {
+    "lo": 50,
+    "hi": 130,
+    "unit": "mm",
+    "note": "the hind hoof flies lower than the fore; estimate scaled from the fore arcs (Gottleib 2025) and from Muybridge's plates 596/601",
+    "dim": "limbs",
+    "main": true
+  },
+  "hind.hoof_max_h_at_swing": {
+    "lo": 0.15,
+    "hi": 0.5,
+    "unit": "fraction",
+    "note": "peak in the first half of swing, as in the fore",
+    "dim": "limbs",
+    "main": false
+  },
+  "track.overtrack_mm.left": {
+    "lo": 50,
+    "hi": 320,
+    "unit": "mm",
+    "note": "print overlap (overtrack) ≈ λ/2 − diagonal distance: dressage medium trot (Clayton 1994, λ 3.26 m) ~0.33 m → ×0.82 ~0.27 m; short stride of ponies (Icelandic ~2.3 m) → ~0.1 m",
+    "dim": "limbs",
+    "main": false
+  },
+  "track.overtrack_mm.right": {
+    "lo": 50,
+    "hi": 320,
+    "unit": "mm",
+    "note": "as track.overtrack_mm.left",
+    "dim": "limbs",
+    "main": false
+  },
+  "leg.compression_pct.fore": {
+    "lo": 5,
+    "hi": 12,
+    "unit": "%",
+    "note": "fore limb compression relative to the standing length: 6.99 ± 1.77 % at 4.4 m/s, 4.46 % at 2.7 m/s (Hobbs & Clayton 2019, scapular spine → distal interphalangeal joint); here shoulder → sole relative to touchdown: a little more",
+    "dim": "limbs",
+    "main": true
+  },
+  "leg.compression_pct.hind": {
+    "lo": 6,
+    "hi": 14,
+    "unit": "%",
+    "note": "hind 8.53 ± 2.13 % at 4.4 m/s (Hobbs & Clayton 2019, trochanter → distal interphalangeal joint); relative to touchdown +1–2 %",
+    "dim": "limbs",
+    "main": true
+  },
+  "smooth.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 4,
+    "unit": "frame",
+    "note": "engineering tolerance: the limb must reach its target (internal label, not geometry)",
+    "dim": "limbs",
+    "main": false
+  },
+  "smooth.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 18,
+    "unit": "°",
+    "note": "a real fetlock or carpus reaches ~600–1000°/s in swing → ≤ 15–17° per frame at 60 Hz; beyond that is a visible jump (hard limit 25°)",
+    "dim": "smoothness",
+    "main": true
+  },
+  "smooth.max_bone_step_all_deg": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "°",
+    "note": "as above, with the ears and tail",
+    "dim": "smoothness",
+    "main": false
+  },
+  "v3.2.stride.freq_hz": {
+    "lo": 1.38,
+    "hi": 1.7,
+    "unit": "Hz",
+    "note": "Fr 1.07: WB working trot (Clayton 1994, f̂ 0.47) and Icelandic horses in hand (f̂ 0.51), scaled",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.stride.length_m": {
+    "lo": 1.88,
+    "hi": 2.32,
+    "unit": "m",
+    "note": "3.2/f with the frequency above",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.duty.fore": {
+    "lo": 0.38,
+    "hi": 0.52,
+    "unit": "fraction",
+    "note": "slow trot: higher duty factor (Rhodin 2022; Weishaupt 2010)",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.duty.hind": {
+    "lo": 0.34,
+    "hi": 0.5,
+    "unit": "fraction",
+    "note": "as above",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.suspension.frac": {
+    "lo": 0,
+    "hi": 0.15,
+    "unit": "fraction",
+    "note": "at Fr ~1 the suspension is short or absent (Rhodin 2022: 2–4 % in hand)",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.diag.dap_lo_ms": {
+    "lo": -10,
+    "hi": 70,
+    "unit": "ms",
+    "note": "hind-first lift-off (Clayton & Hobbs 2019)",
+    "dim": "timing",
+    "main": false
+  },
+  "v3.2.trunk.withers_min_at_stance": {
+    "lo": 0.35,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "minimum at mid-stance at every speed (Hobbs & Clayton 2019)",
+    "dim": "trunk",
+    "main": false
+  },
+  "v5.0.stride.freq_hz": {
+    "lo": 1.52,
+    "hi": 1.9,
+    "unit": "Hz",
+    "note": "Fr 2.60: extended trot (Clayton 1994, f̂ ~0.49) and faster ponies; the frequency grows little with speed",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.stride.length_m": {
+    "lo": 2.63,
+    "hi": 3.29,
+    "unit": "m",
+    "note": "5.0/f with the frequency above",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.duty.fore": {
+    "lo": 0.3,
+    "hi": 0.44,
+    "unit": "fraction",
+    "note": "duty factor falls with speed (Weishaupt 2010; Clayton 1994)",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.duty.hind": {
+    "lo": 0.28,
+    "hi": 0.42,
+    "unit": "fraction",
+    "note": "as above",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.suspension.frac": {
+    "lo": 0.1,
+    "hi": 0.32,
+    "unit": "fraction",
+    "note": "longer suspensions with speed, plateau ~90 ms per phase (Weishaupt 2010)",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.diag.dap_lo_ms": {
+    "lo": -10,
+    "hi": 60,
+    "unit": "ms",
+    "note": "hind-first lift-off (Clayton & Hobbs 2019)",
+    "dim": "timing",
+    "main": false
+  },
+  "v5.0.trunk.withers_min_at_stance": {
+    "lo": 0.35,
+    "hi": 0.55,
+    "unit": "fraction",
+    "note": "minimum at mid-stance",
+    "dim": "trunk",
+    "main": false
+  },
+  "v5.0.trunk.flight_accel_mps2": {
+    "lo": -11.8,
+    "hi": -7.8,
+    "unit": "m/s²",
+    "note": "free fall in suspension",
+    "dim": "trunk",
+    "main": false
+  },
+  "robust.accel.slip_mm": {
+    "lo": 0,
+    "hi": 15,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit (transitions included)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.accel.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.accel.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 25,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); at the gallop the distal joints move faster",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.accel.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.accel.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.accel.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.accel.slip_full_mm": {
+    "lo": 0,
+    "hi": 60,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.accel.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_left.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_left.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); as in the trot",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_left.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_left.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 8,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.duty_fore": {
+    "lo": 0.33,
+    "hi": 0.5,
+    "unit": "fraction",
+    "note": "trot at 4.0 m/s on an 8 m circle: as the straight trot, a little wider",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_left.duty_hind": {
+    "lo": 0.3,
+    "hi": 0.48,
+    "unit": "fraction",
+    "note": "trot at 4.0 m/s on an 8 m circle: as the straight trot, a little wider",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_right.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_right.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); as in the trot",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_right.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.turn_right.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 8,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.duty_fore": {
+    "lo": 0.33,
+    "hi": 0.5,
+    "unit": "fraction",
+    "note": "trot at 4.0 m/s on an 8 m circle: as the straight trot, a little wider",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.turn_right.duty_hind": {
+    "lo": 0.3,
+    "hi": 0.48,
+    "unit": "fraction",
+    "note": "trot at 4.0 m/s on an 8 m circle: as the straight trot, a little wider",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_up.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_up.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); as in the trot",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_up.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_up.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 8,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.duty_fore": {
+    "lo": 0.3,
+    "hi": 0.52,
+    "unit": "fraction",
+    "note": "trot on a 15 % grade: all four hooves must land; stances similar to level ground (Dutto et al. 2004), wide range",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_up.duty_hind": {
+    "lo": 0.3,
+    "hi": 0.52,
+    "unit": "fraction",
+    "note": "trot on a 15 % grade: all four hooves must land; stances similar to level ground (Dutto et al. 2004), wide range",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_down.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_down.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); as in the trot",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_down.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.slope_down.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 8,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.duty_fore": {
+    "lo": 0.3,
+    "hi": 0.52,
+    "unit": "fraction",
+    "note": "trot on a −15 % grade: as above",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.slope_down.duty_hind": {
+    "lo": 0.3,
+    "hi": 0.52,
+    "unit": "fraction",
+    "note": "trot on a −15 % grade: as above",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.slip_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.walk.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.walk.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 15,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); at the walk the angular velocities are lower",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.walk.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.walk.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.slip_full_mm": {
+    "lo": 0,
+    "hi": 50,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 8,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.duty_fore": {
+    "lo": 0.55,
+    "hi": 0.7,
+    "unit": "fraction",
+    "note": "walk at 1.8 m/s (Fr 0.34): fore duty factor 0.62–0.65, hind 0.57–0.59 (Rhodin 2022, three breeds), a little less in a brisk walk",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.walk.duty_hind": {
+    "lo": 0.52,
+    "hi": 0.68,
+    "unit": "fraction",
+    "note": "walk at 1.8 m/s (Fr 0.34): fore duty factor 0.62–0.65, hind 0.57–0.59 (Rhodin 2022, three breeds), a little less in a brisk walk",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.slip_mm": {
+    "lo": 0,
+    "hi": 15,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.canter.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.canter.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 22,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); as in the trot",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.canter.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.canter.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.slip_full_mm": {
+    "lo": 0,
+    "hi": 60,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 6,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.duty_fore": {
+    "lo": 0.2,
+    "hi": 0.38,
+    "unit": "fraction",
+    "note": "canter at 8.5 m/s for a pony (Fr 7.5, almost a racing gallop): duty factor ~0.2–0.35; estimate",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.canter.duty_hind": {
+    "lo": 0.2,
+    "hi": 0.38,
+    "unit": "fraction",
+    "note": "canter at 8.5 m/s for a pony (Fr 7.5, almost a racing gallop): duty factor ~0.2–0.35; estimate",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.slip_mm": {
+    "lo": 0,
+    "hi": 20,
+    "unit": "mm",
+    "note": "engineering tolerance under the 30 mm hard limit; at the gallop some impact slip stays in the window (short stances)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.gallop.penetration_mm": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "mm",
+    "note": "as in the trot: the hoof does not enter the ground (hard limit 15 mm)",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.gallop.max_bone_step_deg": {
+    "lo": 0,
+    "hi": 25,
+    "unit": "°",
+    "note": "maximum bone step per frame at 60 Hz (hard limit 25°); at the gallop the distal joints move faster",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.gallop.hover_mm": {
+    "hi": 4,
+    "unit": "mm",
+    "note": "every hoof must touch the ground (above 4 mm it never does); negative values are penetration, already counted by penetration_mm",
+    "dim": "robustness",
+    "main": true
+  },
+  "robust.gallop.float_mm": {
+    "lo": -2,
+    "hi": 2,
+    "unit": "mm",
+    "note": "as in the trot",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.scrape_mm": {
+    "lo": 0,
+    "hi": 10,
+    "unit": "mm",
+    "note": "no notable scraping",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.slip_full_mm": {
+    "lo": 0,
+    "hi": 60,
+    "unit": "mm",
+    "note": "as contact.slip_full_mm",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.ik_unreached_frames": {
+    "lo": 0,
+    "hi": 5,
+    "unit": "frame",
+    "note": "≤ ~2 % of the 60 Hz frames; internal label",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.duty_fore": {
+    "lo": 0.14,
+    "hi": 0.27,
+    "unit": "fraction",
+    "note": "gallop at 13.5 m/s (Fr 19): stances of ~80–90 ms in strides of ~0.42–0.45 s in Thoroughbreds at equal Fr; estimate",
+    "dim": "robustness",
+    "main": false
+  },
+  "robust.gallop.duty_hind": {
+    "lo": 0.14,
+    "hi": 0.27,
+    "unit": "fraction",
+    "note": "gallop at 13.5 m/s (Fr 19): stances of ~80–90 ms in strides of ~0.42–0.45 s in Thoroughbreds at equal Fr; estimate",
+    "dim": "robustness",
+    "main": false
+  }
+}

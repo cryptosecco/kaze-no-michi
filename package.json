@@ -1,0 +1,49 @@
+{
+  "name": "kaze-no-michi",
+  "version": "0.1.0",
+  "description": "風の道 (Kaze no Michi): a procedural samurai action-adventure for the browser (WebGL2 · Three.js).",
+  "private": true,
+  "license": "MIT",
+  "author": "havok6",
+  "homepage": "https://github.com/cryptosecco/kaze-no-michi#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptosecco/kaze-no-michi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cryptosecco/kaze-no-michi/issues"
+  },
+  "keywords": [
+    "game",
+    "browser-game",
+    "webgl",
+    "webgl2",
+    "threejs",
+    "samurai",
+    "action-adventure",
+    "procedural",
+    "procedural-generation",
+    "vite"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "shots": "node scripts/shots.mjs",
+    "trotlab": "node scripts/trotlab/sim.mjs",
+    "trotlab:capture": "node scripts/trotlab/capture.mjs",
+    "trotlab:all": "node scripts/trotlab/all.mjs",
+    "test": "node --test \"scripts/*.test.mjs\""
+  },
+  "dependencies": {
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0",
+    "vite": "^8.3.1"
+  }
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>風の道 — Kaze no Michi</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0a09'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23c8321e'/%3E%3C/svg%3E" />
+    <meta name="description" content="Kaze no Michi — a samurai journey across the autumn island of Hoshigashima." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho:wght@400;500&family=Yuji+Boku&display=swap" />
+    <style>
+      :root { color-scheme: dark; }
+      html, body { margin: 0; height: 100%; background: #0b0a09; overflow: hidden; }
+      #app { position: fixed; inset: 0; }
+      #kaze-canvas { display: block; width: 100%; height: 100%; }
+      #ui { position: fixed; inset: 0; pointer-events: none; z-index: 20; }
+      #boot {
+        position: fixed; inset: 0; display: grid; place-items: center; z-index: 100;
+        background: radial-gradient(120% 90% at 50% 42%, #1a1611 0%, #0d0b09 58%, #070605 100%);
+        color: #f2e9d8; font-family: 'Cormorant Garamond', 'Iowan Old Style', Palatino, Georgia, serif;
+        transition: opacity .9s ease; -webkit-font-smoothing: antialiased;
+      }
+      #boot::before {
+        content: ''; position: absolute; inset: 0; opacity: .5; pointer-events: none; mix-blend-mode: screen;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='8'/%3E%3CfeColorMatrix values='0 0 0 0 0.12  0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23f)'/%3E%3C/svg%3E");
+      }
+      #boot.hide { opacity: 0; pointer-events: none; }
+      #boot .card { position: relative; display: flex; flex-direction: column; align-items: center; transform: translateY(-3vh); }
+      #boot .k {
+        font-family: 'Yuji Boku', 'Hiragino Mincho ProN', 'Yu Mincho', serif; font-size: clamp(64px, 6.4vw, 112px); line-height: 1;
+        letter-spacing: -.01em; color: #f2e9d8; filter: url(#kz-boot-ink); text-shadow: 0 6px 30px rgba(0,0,0,.5);
+        animation: kz-boot-in 2.2s cubic-bezier(.22,.68,.18,1) both;
+      }
+      #boot .romaji { margin-top: 18px; font-weight: 300; font-size: 13px; letter-spacing: .66em; padding-left: .66em; color: rgba(242,233,216,.62); }
+      #boot .bar { position: relative; width: 300px; height: 14px; margin: 44px auto 0; }
+      #boot .bar svg { position: absolute; left: 0; top: 0; width: 300px; height: 14px; overflow: visible; }
+      #boot .bar > svg { color: rgba(242,233,216,.13); }
+      #boot .bar i { position: absolute; left: 0; top: 0; display: block; height: 100%; width: 0; overflow: hidden; color: #d9b56f; transition: width .5s cubic-bezier(.22,.68,.18,1); }
+      #boot .haiku { position: relative; width: min(760px, 86vw); height: 124px; margin-top: 46px; text-align: center; }
+      #boot .haiku p { position: absolute; inset: 0; margin: 0; opacity: 0; animation: kz-haiku 28s linear infinite; }
+      #boot .haiku p:nth-child(2) { animation-delay: 7s; }
+      #boot .haiku p:nth-child(3) { animation-delay: 14s; }
+      #boot .haiku p:nth-child(4) { animation-delay: 21s; }
+      #boot .haiku .jp { display: block; font-family: 'Shippori Mincho', 'Hiragino Mincho ProN', serif; font-size: 18px; letter-spacing: .34em; color: rgba(242,233,216,.9); }
+      #boot .haiku .tr { display: block; margin-top: 14px; font-size: 20px; font-style: italic; letter-spacing: .03em; color: rgba(242,233,216,.72); }
+      #boot .haiku .en { display: block; margin-top: 4px; font-size: 15px; font-style: italic; color: rgba(242,233,216,.42); }
+      #boot .haiku .au { display: block; margin-top: 12px; font-size: 11px; font-weight: 600; letter-spacing: .5em; text-transform: uppercase; color: rgba(217,181,111,.75); }
+      @keyframes kz-boot-in { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+      @keyframes kz-haiku { 0% { opacity: 0; transform: translateY(6px); } 4% { opacity: 1; transform: none; } 22% { opacity: 1; } 25% { opacity: 0; } 100% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) { #boot .k { animation: none; } #boot .haiku p { animation-duration: 0s; opacity: 0; } #boot .haiku p:first-child { opacity: 1; } }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="ui"></div>
+    <div id="boot">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <filter id="kz-boot-ink" x="-8%" y="-12%" width="116%" height="124%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.028 0.06" numOctaves="3" seed="7" result="w" />
+          <feDisplacementMap in="SourceGraphic" in2="w" scale="6" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <symbol id="kz-boot-stroke" viewBox="0 0 300 14"><path d="M4.9,5.9L8.9,3.6L13,1.9L17,1.2L21,1.1L25.1,1.1L29.1,1.1L33.1,1L37.1,1L41.2,1L45.2,1.1L49.2,1.2L53.3,1.3L57.3,1.3L61.3,1.4L65.4,1.6L69.4,1.8L73.4,2.1L77.5,2.2L81.5,2.1L85.5,2L89.5,1.8L93.6,1.7L97.6,1.8L101.6,2L105.7,2.3L109.7,2.6L113.7,2.8L117.8,2.9L121.8,3.1L125.8,3.3L129.8,3.4L133.9,3.5L137.9,3.3L141.9,3.1L146,2.9L150,2.7L154,2.8L158.1,2.8L162.1,2.8L166.1,2.8L170.2,2.7L174.2,2.8L178.2,2.8L182.2,2.9L186.3,2.8L190.3,2.7L194.3,2.6L198.4,2.5L202.4,2.5L206.4,2.6L210.5,2.8L214.5,3.1L218.5,3.4L222.6,3.6L226.6,3.7L230.6,3.7L234.6,3.7L238.7,3.8L242.7,3.9L246.7,4.1L250.8,4.2L254.8,4.3L258.8,4.5L262.9,4.6L266.9,4.8L270.9,4.9L274.9,5.1L279,5.3L283,5.6L287,5.9L291.1,6.2L295.1,6.5L295.1,6.5L291.1,6.9L287,7.1L283,7.3L279,7.5L274.9,7.7L270.9,7.9L266.9,8.1L262.9,8.3L258.8,8.5L254.8,8.7L250.8,8.9L246.7,9.1L242.7,9.2L238.7,9.4L234.6,9.5L230.6,9.6L226.6,9.7L222.6,9.8L218.5,10L214.5,10.2L210.5,10.5L206.4,10.8L202.4,11L198.4,11.2L194.3,11.3L190.3,11.4L186.3,11.4L182.2,11.5L178.2,11.5L174.2,11.6L170.2,11.6L166.1,11.6L162.1,11.7L158.1,11.8L154,11.9L150,11.9L146,11.9L141.9,11.7L137.9,11.5L133.9,11.3L129.8,11.2L125.8,11L121.8,10.9L117.8,10.7L113.7,10.5L109.7,10.5L105.7,10.4L101.6,10.4L97.6,10.4L93.6,10.3L89.5,10.1L85.5,9.8L81.5,9.6L77.5,9.5L73.4,9.6L69.4,9.8L65.4,10L61.3,10.2L57.3,10.2L53.3,10.1L49.2,9.9L45.2,9.8L41.2,9.8L37.1,9.9L33.1,10L29.1,10.1L25.1,10.2L21,10.3L17,10.4L13,10.1L8.9,8.4L4.9,5.9Z"/><path d="M171,7.3L180.2,6.9L189.5,6.5L198.8,6.1L208.1,5.8L217.4,5.7L226.6,5.6L235.9,5.6L245.2,5.7L254.5,5.9L263.8,6.1L273.1,6.3L282.3,6.6L291.6,6.6L300.9,6.6L300.9,6.6L291.6,6.6L282.3,6.6L273.1,6.9L263.8,7.1L254.5,7.3L245.2,7.4L235.9,7.5L226.6,7.5L217.4,7.5L208.1,7.5L198.8,7.4L189.5,7.4L180.2,7.4L171,7.3Z"/><path d="M170.5,6.1L179.2,5.8L187.9,5.5L196.6,5.2L205.3,5L214,4.8L222.7,4.8L231.4,4.8L240.1,4.9L248.8,5L257.5,5.1L266.2,5.3L274.9,5.5L283.6,5.5L292.3,5.5L292.3,5.5L283.6,5.5L274.9,5.6L266.2,5.7L257.5,5.9L248.8,6L240.1,6.1L231.4,6.1L222.7,6.1L214,6.1L205.3,6.1L196.6,6.2L187.9,6.2L179.2,6.2L170.5,6.1Z"/><path d="M179.5,5.1L183.7,4.8L187.9,4.5L192.2,4.2L196.4,4L200.7,3.8L204.9,3.8L209.1,3.7L213.4,3.8L217.6,3.9L221.9,4.1L226.1,4.3L230.3,4.5L234.6,4.6L238.8,4.6L238.8,4.6L234.6,4.6L230.3,4.6L226.1,4.8L221.9,5.1L217.6,5.2L213.4,5.4L209.1,5.5L204.9,5.6L200.7,5.6L196.4,5.6L192.2,5.5L187.9,5.4L183.7,5.2L179.5,5.1Z"/><path d="M249,4.6L252.7,4.4L256.4,4.2L260.1,4L263.8,3.9L267.5,3.8L271.2,3.8L274.9,3.8L278.6,3.9L282.4,4L286.1,4.2L289.8,4.4L293.5,4.7L297.2,4.7L300.9,4.7L300.9,4.7L297.2,4.7L293.5,4.8L289.8,5L286.1,5.2L282.4,5.4L278.6,5.5L274.9,5.6L271.2,5.6L267.5,5.6L263.8,5.4L260.1,5.3L256.4,5.1L252.7,4.9L249,4.6Z"/><path d="M176.7,7.3L179.4,7.1L182.1,6.9L184.9,6.7L187.6,6.5L190.4,6.4L193.1,6.4L195.9,6.3L198.6,6.3L201.4,6.4L204.1,6.5L206.9,6.6L209.6,6.7L212.4,6.7L215.1,6.7L215.1,6.7L212.4,6.7L209.6,6.7L206.9,6.9L204.1,7.1L201.4,7.3L198.6,7.4L195.9,7.5L193.1,7.6L190.4,7.6L187.6,7.6L184.9,7.5L182.1,7.5L179.4,7.4L176.7,7.3Z"/><path d="M225.3,6.6L230.5,6.5L235.6,6.3L240.8,6.2L246,6.1L251.2,6.1L256.4,6L261.6,6.1L266.7,6.1L271.9,6.2L277.1,6.3L282.3,6.5L287.5,6.6L292.7,6.7L297.8,6.7L297.8,6.7L292.7,6.7L287.5,6.7L282.3,6.8L277.1,7L271.9,7.1L266.7,7.2L261.6,7.2L256.4,7.2L251.2,7.2L246,7.2L240.8,7.1L235.6,6.9L230.5,6.8L225.3,6.6Z"/><path d="M180.7,5.3L188.4,5L196.1,4.6L203.8,4.4L211.4,4.2L219.1,4L226.8,4L234.5,4L242.1,4.1L249.8,4.3L257.5,4.4L265.2,4.6L272.8,4.9L280.5,4.9L288.2,4.9L288.2,4.9L280.5,4.9L272.8,4.9L265.2,5.1L257.5,5.3L249.8,5.4L242.1,5.5L234.5,5.6L226.8,5.6L219.1,5.6L211.4,5.5L203.8,5.5L196.1,5.4L188.4,5.4L180.7,5.3Z"/><path d="M199.1,7.8L201.7,7.5L204.3,7.3L206.9,7L209.5,6.9L212.1,6.7L214.7,6.7L217.3,6.7L219.9,6.8L222.5,6.9L225.1,7.1L227.7,7.3L230.3,7.5L232.9,7.5L235.5,7.5L235.5,7.5L232.9,7.5L230.3,7.6L227.7,7.8L225.1,8L222.5,8.2L219.9,8.3L217.3,8.4L214.7,8.5L212.1,8.5L209.5,8.4L206.9,8.3L204.3,8.1L201.7,8L199.1,7.8Z"/><path d="M245.6,7.5L248.9,7.3L252.2,7.1L255.4,6.9L258.7,6.8L261.9,6.7L265.2,6.6L268.4,6.7L271.7,6.8L275,6.9L278.2,7.1L281.5,7.3L284.7,7.5L288,7.5L291.3,7.5L291.3,7.5L288,7.5L284.7,7.6L281.5,7.8L278.2,8L275,8.2L271.7,8.3L268.4,8.4L265.2,8.4L261.9,8.4L258.7,8.3L255.4,8.2L252.2,8L248.9,7.8L245.6,7.5Z"/></symbol>
+      </svg>
+      <div class="card">
+        <div class="k" lang="ja">風の道</div>
+        <div class="romaji">KAZE NO MICHI</div>
+        <div class="bar"><svg viewBox="0 0 300 14" aria-hidden="true"><use href="#kz-boot-stroke" fill="currentColor" /></svg><i><svg viewBox="0 0 300 14" aria-hidden="true"><use href="#kz-boot-stroke" fill="currentColor" /></svg></i></div>
+        <div class="haiku">
+          <p><span class="jp" lang="ja">この道や　行く人なしに　秋の暮</span><span class="tr">Questa strada: nessuno la percorre, sera d’autunno.</span><span class="en">This road: no one walks it, autumn dusk.</span><span class="au">Bashō</span></p>
+          <p><span class="jp" lang="ja">あかあかと　日はつれなくも　秋の風</span><span class="tr">Rosso, rosso il sole, indifferente, eppure vento d’autunno.</span><span class="en">Red, red, the heartless sun, and yet the autumn wind.</span><span class="au">Bashō</span></p>
+          <p><span class="jp" lang="ja">石山の　石より白し　秋の風</span><span class="tr">Più bianco delle pietre di Ishiyama: il vento d’autunno.</span><span class="en">Whiter than the stones of Ishiyama: the autumn wind.</span><span class="au">Bashō</span></p>
+          <p><span class="jp" lang="ja">旅に病んで　夢は枯野を　かけ廻る</span><span class="tr">Malato in viaggio, i sogni vagano per campi riarsi.</span><span class="en">Ill on a journey, my dreams roam the withered fields.</span><span class="au">Bashō</span></p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
